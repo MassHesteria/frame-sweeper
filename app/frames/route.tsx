@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
-import { createBoard, frames, initShown, parseInput, printBoard } from "./frames";
+import { createBoard, frames, initShown, isGameOver, parseInput, printBoard } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
  
@@ -42,11 +42,13 @@ const handleRequest = frames(async (ctx) => {
     shown
   }
 
-  const input = parseInput(ctx.message?.inputText)
-  if (input != undefined) {
-    shown[input.row][input.col] = true
+  if (!isGameOver(board, shown)) {
+    const input = parseInput(ctx.message?.inputText)
+    if (input != undefined) {
+      shown[input.row][input.col] = true
+    }
+    console.log(shown)
   }
-  console.log(shown)
   //console.log(parseInput(ctx.message?.inputText))
 
   printBoard(board)

@@ -25,6 +25,10 @@ export const createBoard = (size: number) => {
     board.push(new Array(size + 2).fill(0))
   }
 
+  //----------------------------------------
+  // Randomly place mines
+  //----------------------------------------
+
   let num = 2
   while (num > 0) {
     const i = getRandomNumber(1, 3);
@@ -35,6 +39,10 @@ export const createBoard = (size: number) => {
     board[i][j] = -1;
     num -= 1;
   }
+
+  //----------------------------------------
+  // Update counts for non-mine cells
+  //----------------------------------------
 
   for (let i = 1; i <= size; i++) {
     for (let j = 1; j <= size; j++) {
@@ -75,6 +83,17 @@ export const parseInput = (text: string|undefined): Input | undefined => {
   const col = text.charCodeAt(0) - 'a'.charCodeAt(0) + 1
   const row = text.charCodeAt(1) - '0'.charCodeAt(0)
   return { row, col }
+}
+
+export const isGameOver = (board: Board, shown: boolean[][]) => {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board.length; j++) {
+      if (shown[i][j] && board[i][j] == -1) {
+        return true
+      }
+    }
+  }
+  return false
 }
 
 export const printBoard = (board: Board) => {

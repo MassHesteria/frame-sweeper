@@ -1,4 +1,4 @@
-import { Board } from "./frames";
+import { Board, isGameOver } from "./frames";
 
 const IntroPage = () => {
   return (
@@ -17,10 +17,12 @@ const Row = ({
   row,
   idx,
   shown,
+  gameOver
 }: {
   row: number[];
   idx: number;
   shown: boolean[][];
+  gameOver: boolean;
 }) => {
   const getTile = (value: number) => {
     if (value == -1) {
@@ -37,6 +39,17 @@ const Row = ({
   const getColumnLabel = (i: number) => {
     return String.fromCharCode("a".charCodeAt(0) + i - 1);
   };
+  const getBackgroundColor = (i: number) => {
+    if (gameOver) {
+      if (row[i] == -1) {
+        return 'bg-red-700'
+      }
+    }
+    if (shown[idx][i]) {
+      return 'bg-green-500'
+    }
+    return ''
+  }
   return (
     <div tw="flex flex-row w-full h-1/5">
       {row.map((c, i, arr) => {
@@ -57,8 +70,8 @@ const Row = ({
           );
         } else if (i > 0 && i < arr.length - 1) {
           const classes =
-            "flex border-2 border-black w-1/5 h-full" +
-            (shown[idx][i] ? " bg-orange-700" : "");
+            "flex border-2 border-black w-1/5 h-full " +
+            getBackgroundColor(i)
           return (
             <div key={i} tw={classes}>
               <span tw="m-auto">{getTile(c)}</span>
@@ -84,7 +97,15 @@ export const generateImage = (
         <span tw="text-red-700 pb-10 mx-auto">Board</span>
         {board.map((r, i, arr) => {
           if (i < arr.length - 1) {
-            return <Row key={i} row={r} idx={i} shown={shown} />;
+            return (
+              <Row
+                key={i}
+                row={r}
+                idx={i}
+                shown={shown}
+                gameOver={isGameOver(board, shown)}
+              />
+            );
           }
         })}
         {/*<span>
