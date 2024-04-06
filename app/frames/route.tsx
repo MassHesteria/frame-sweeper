@@ -1,35 +1,31 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
-import { frames } from "./frames";
+import { createBoard, frames, initShown } from "./frames";
 import { getHostName} from "../data";
+import { generateImage } from "./generate";
  
 const handleRequest = frames(async (ctx) => {
   const currentState = ctx.state;
+  const fid = ctx.message?.requesterFid;
   
+  let board = currentState.board;
+  let shown = currentState.shown;
+  if (fid) {
+    if (board.length == 0) {
+      board = createBoard(3)
+      shown = initShown(3)
+    }
+  }
+
   const updatedState = {
     ...currentState,
-    count: currentState.count + 1,
+    board,
+    shown
   }
 
   console.log(JSON.stringify(ctx))
   return {
-    image: (
-      <div tw="flex flex-col">
-        <span>
-          {ctx.pressedButton
-            ? `I clicked ${ctx.searchParams.value}`
-            : `Click some button`}
-        </span>
-        <span>
-          {ctx.message?.inputText
-            ? `Text: ${ctx.message.inputText}`
-            : 'no text'}
-        </span>
-        <span>
-          {ctx.state.count}
-        </span>
-      </div>
-    ),
+    image: generateImage(fid, currentState),
     imageOptions: {
         aspectRatio: '1:1'
     },
