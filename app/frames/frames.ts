@@ -62,6 +62,21 @@ export const initShown = (size: number) => {
   return shown
 }
 
+export type Input = {
+  row: number
+  col: number
+}
+
+export const parseInput = (text: string|undefined): Input | undefined => {
+  if (text == undefined || text.length != 2) {
+    return undefined
+  }
+  //TODO: Make this much better
+  const col = text.charCodeAt(0) - 'a'.charCodeAt(0) + 1
+  const row = text.charCodeAt(1) - '0'.charCodeAt(0)
+  return { row, col }
+}
+
 export const printBoard = (board: Board) => {
   for (let i = 1; i < board.length - 1; i++) {
     let row = ''

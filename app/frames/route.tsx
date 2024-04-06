@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
-import { createBoard, frames, initShown, printBoard } from "./frames";
+import { createBoard, frames, initShown, parseInput, printBoard } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
  
@@ -41,6 +41,8 @@ const handleRequest = frames(async (ctx) => {
     board,
     shown
   }
+
+  console.log(parseInput(ctx.message?.inputText))
 
   printBoard(board)
   return {
