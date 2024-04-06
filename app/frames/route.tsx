@@ -4,7 +4,14 @@ import { frames } from "./frames";
 import { getHostName} from "../data";
  
 const handleRequest = frames(async (ctx) => {
-  //console.log(JSON.stringify(ctx))
+  const currentState = ctx.state;
+  
+  const updatedState = {
+    ...currentState,
+    count: currentState.count + 1,
+  }
+
+  console.log(JSON.stringify(ctx))
   return {
     image: (
       <div tw="flex flex-col">
@@ -17,6 +24,9 @@ const handleRequest = frames(async (ctx) => {
           {ctx.message?.inputText
             ? `Text: ${ctx.message.inputText}`
             : 'no text'}
+        </span>
+        <span>
+          {ctx.state.count}
         </span>
       </div>
     ),
@@ -32,6 +42,7 @@ const handleRequest = frames(async (ctx) => {
         Say No
       </Button>,
     ],
+    state: updatedState,
     headers: { 
       // Max cache age in seconds
       "Cache-Control": "max-age=0", 
