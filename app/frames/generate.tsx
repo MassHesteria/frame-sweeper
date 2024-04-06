@@ -13,27 +13,39 @@ const IntroPage = () => {
   )
 }
 
+const Row = ({ row }: { row: number[]}) => {
+  const getTile = (value: number) => {
+    if (value == -1) {
+      return 'X'
+    }
+    return value;
+  }
+  return (
+    <div tw="flex flex-row">
+      {row.map((c, i, arr) => {
+        if (i > 0 && i < arr.length - 1) {
+          return (
+            <span tw="w-1/10 h-1/10">{getTile(c)}</span>
+          )
+        }
+      })}
+    </div>
+  )
+}
+
 export const generateImage = (fid: number | undefined, state: State) => {
   if (fid == undefined) {
     return <IntroPage />
   }
   return (
       <div tw="flex flex-col">
-        <div tw="flex flex-row">
-          <span tw="w-1/5">x</span>
-          <span tw="w-1/5">x</span>
-          <span tw="w-1/5">x</span>
-        </div>
-        <div tw="flex flex-row">
-          <span tw="w-1/5">x</span>
-          <span tw="w-1/5">x</span>
-          <span tw="w-1/5">x</span>
-        </div>
-        <div tw="flex flex-row">
-          <span tw="w-1/5">x</span>
-          <span tw="w-1/5">x</span>
-          <span tw="w-1/5">x</span>
-        </div>
+        {state.board.map((r, i, arr) => {
+          if (i > 0 && i < arr.length - 1) {
+            return (
+              <Row row={r} />
+            )
+          }
+        })}
         {/*<span>
           {ctx.pressedButton
             ? `I clicked ${ctx.searchParams.value}`
@@ -44,10 +56,6 @@ export const generateImage = (fid: number | undefined, state: State) => {
             ? `Text: ${ctx.message.inputText}`
             : 'no text'}
           </span>*/}
-        <span>
-          Count {state.board}
-          Count {state.shown}
-        </span>
       </div>
   )
 }

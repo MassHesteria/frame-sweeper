@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
-import { createBoard, frames, initShown } from "./frames";
+import { createBoard, frames, initShown, printBoard } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
  
@@ -23,7 +23,7 @@ const handleRequest = frames(async (ctx) => {
     shown
   }
 
-  console.log(JSON.stringify(ctx))
+  //printBoard(board)
   return {
     image: generateImage(fid, currentState),
     imageOptions: {

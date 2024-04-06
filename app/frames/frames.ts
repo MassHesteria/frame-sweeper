@@ -46,3 +46,17 @@ export const initShown = (size: number) => {
   }
   return shown
 }
+
+export const printBoard = (board: Board) => {
+  for (let i = 1; i < board.length - 1; i++) {
+    let row = ''
+    for (let j = 1; j < board.length - 1; j++) {
+      if (board[i][j] == -1) {
+        row += 'x '
+      } else {
+        row += `${board[i][j]} `
+      }
+    }
+    console.log(row)
+  }
+}
