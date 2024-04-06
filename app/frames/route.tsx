@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
-import { createBoard, frames, initShown, isGameOver, parseInput, printBoard } from "./frames";
+import { initGame, frames, isGameOver, parseInput, printBoard } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
  
@@ -12,21 +12,22 @@ const handleRequest = frames(async (ctx) => {
   const baseRoute = getHostName() + "/frames?ts=" + timestamp
   
   let board = currentState.board;
-  let shown = currentState.shown;
+  let cells = currentState.cells;
   if (fid != undefined) {
     if (board.length == 0 || ctx.searchParams.newGame) {
-      board = createBoard(3)
-      shown = initShown(3)
+      const game = initGame(5)
+      board = game.board
+      cells = game.cells
     }
   } else {
       return ({
-        image: generateImage(fid, board, shown),
+        image: generateImage(fid, board, cells),
         imageOptions: {
             aspectRatio: '1.91:1'
         },
         buttons: [
           <Button action="post" target={baseRoute + "&newGame=1"}>
-            Start Playing
+            Start Playing 🙂
           </Button>
         ],
         headers: { 
@@ -39,31 +40,35 @@ const handleRequest = frames(async (ctx) => {
   const updatedState = {
     ...currentState,
     board,
-    shown
+    cells
   }
 
-  if (!isGameOver(board, shown)) {
+  if (!isGameOver(board, cells)) {
     const input = parseInput(ctx.message?.inputText)
     if (input != undefined) {
-      shown[input.row][input.col] = true
+      if (ctx.searchParams.markMine) {
+        cells[input.row][input.col] = -1
+      } else {
+        cells[input.row][input.col] = 1
+      }
     }
-    console.log(shown)
+    console.log(cells)
   }
   //console.log(parseInput(ctx.message?.inputText))
 
   printBoard(board)
   return {
-    image: generateImage(fid, board, shown),
+    image: generateImage(fid, board, cells),
     imageOptions: {
         aspectRatio: '1:1'
     },
-    textInput: fid ? 'Move: a2, c1, etc.' : undefined,
+    textInput: fid ? 'Enter Cell: a2, c1, etc.' : undefined,
     buttons: [
-      <Button action="post" target={baseRoute + "&makeMove=1"}>
-        Make Move
+      <Button action="post" target={baseRoute + "&markMine=1"}>
+        Mark Mine
       </Button>,
-      <Button action="post" target={baseRoute + "&newGame=1"}>
-        New Game ↻
+      <Button action="post" target={baseRoute + "&makeMove=1"}>
+        Open Cell
       </Button>,
     ],
     state: updatedState,

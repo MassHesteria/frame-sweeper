@@ -1,17 +1,18 @@
 import { createFrames } from "frames.js/next";
 
 export type Board = number[][];
+export type Cell = -1|0|1
 
 export type State = {
-  board: number[][];
-  shown: boolean[][];
+  board: Board;
+  cells: Cell[][];
 };
 
 export const frames = createFrames<State>({
   basePath: "/frames",
   initialState: {
     board: [],
-    shown: []
+    cells: []
   },
 });
 
@@ -19,7 +20,7 @@ function getRandomNumber(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export const createBoard = (size: number) => {
+export const initGame = (size: number): State => {
   let board: Board = [];
   for (let i = 0; i < size + 2; i++) {
     board.push(new Array(size + 2).fill(0))
@@ -29,10 +30,10 @@ export const createBoard = (size: number) => {
   // Randomly place mines
   //----------------------------------------
 
-  let num = 2
+  let num = getRandomNumber(size - 2, size + 4)
   while (num > 0) {
-    const i = getRandomNumber(1, 3);
-    const j = getRandomNumber(1, 3);
+    const i = getRandomNumber(1, size);
+    const j = getRandomNumber(1, size);
     if (board[i][j] == -1) {
       continue;
     }
@@ -59,15 +60,12 @@ export const createBoard = (size: number) => {
     }
   }
 
-  return board
-}
-
-export const initShown = (size: number) => {
-  let shown: boolean[][] = [];
+  let cells: Cell[][] = [];
   for (let i = 0; i < size + 2; i++) {
-    shown.push(new Array(size + 2).fill(false))
+    cells.push(new Array(size + 2).fill(0))
   }
-  return shown
+
+  return { board, cells }
 }
 
 export type Input = {
@@ -85,10 +83,10 @@ export const parseInput = (text: string|undefined): Input | undefined => {
   return { row, col }
 }
 
-export const isGameOver = (board: Board, shown: boolean[][]) => {
+export const isGameOver = (board: Board, cells: Cell[][]) => {
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board.length; j++) {
-      if (shown[i][j] && board[i][j] == -1) {
+      if (cells[i][j] == 1 && board[i][j] == -1) {
         return true
       }
     }

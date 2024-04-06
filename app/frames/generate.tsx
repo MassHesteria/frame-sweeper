@@ -1,4 +1,4 @@
-import { Board, isGameOver } from "./frames";
+import { Board, Cell, isGameOver } from "./frames";
 
 const IntroPage = () => {
   return (
@@ -16,12 +16,12 @@ const IntroPage = () => {
 const Row = ({
   row,
   idx,
-  shown,
+  cells,
   gameOver
 }: {
   row: number[];
   idx: number;
-  shown: boolean[][];
+  cells: Cell[][];
   gameOver: boolean;
 }) => {
   const getTile = (value: number) => {
@@ -45,18 +45,20 @@ const Row = ({
         return 'bg-red-700'
       }
     }
-    if (shown[idx][i]) {
+    if (cells[idx][i] == 1) {
       return 'bg-green-500'
+    } else if (cells[idx][i] == -1) {
+      return 'bg-yellow-500'
     }
     return ''
   }
   return (
-    <div tw="flex flex-row w-full h-1/5">
+    <div tw="flex flex-row w-full h-1/10">
       {row.map((c, i, arr) => {
         if (idx == 0) {
           if (i != 0 && i < arr.length - 1) {
             return (
-              <div key={i} tw="flex w-1/5 h-full">
+              <div key={i} tw="flex w-1/10 h-full">
                 <span tw="mx-auto mt-auto pb-5">{getColumnLabel(i)}</span>
               </div>
             );
@@ -64,13 +66,13 @@ const Row = ({
         }
         if (i == 0) {
           return (
-            <div key={i} tw="flex w-1/5 h-full">
+            <div key={i} tw="flex w-1/10 h-full">
               <span tw="ml-auto my-auto pr-5">{getRowLabel()}</span>
             </div>
           );
         } else if (i > 0 && i < arr.length - 1) {
           const classes =
-            "flex border-2 border-black w-1/5 h-full " +
+            "flex border-2 border-black w-1/10 h-full " +
             getBackgroundColor(i)
           return (
             <div key={i} tw={classes}>
@@ -86,7 +88,7 @@ const Row = ({
 export const generateImage = (
   fid: number | undefined,
   board: Board,
-  shown: boolean[][]
+  cells: Cell[][]
 ) => {
   if (fid == undefined) {
     return <IntroPage />;
@@ -102,8 +104,8 @@ export const generateImage = (
                 key={i}
                 row={r}
                 idx={i}
-                shown={shown}
-                gameOver={isGameOver(board, shown)}
+                cells={cells}
+                gameOver={isGameOver(board, cells)}
               />
             );
           }
