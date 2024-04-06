@@ -32,6 +32,10 @@ const handleRequest = frames(async (ctx) => {
         Say No
       </Button>,
     ],
+    headers: { 
+      // Max cache age in seconds
+      "Cache-Control": "max-age=0", 
+    },
   };
 });
  
