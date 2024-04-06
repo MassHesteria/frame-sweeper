@@ -15,7 +15,7 @@ const handleRequest = frames(async (ctx) => {
   let cells = currentState.cells;
   if (fid != undefined) {
     if (board.length == 0 || ctx.searchParams.newGame) {
-      const game = initGame(5)
+      const game = initGame(9, 10)
       board = game.board
       cells = game.cells
     }
@@ -52,7 +52,7 @@ const handleRequest = frames(async (ctx) => {
         cells[input.row][input.col] = 1
       }
     }
-    console.log(cells)
+    //console.log(cells)
   }
   //console.log(parseInput(ctx.message?.inputText))
 

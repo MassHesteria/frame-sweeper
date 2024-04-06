@@ -27,6 +27,8 @@ const Row = ({
   const getTile = (value: number) => {
     if (value == -1) {
       return "X";
+    } else if (value == 0) {
+      return ' '
     }
     return value;
   };
@@ -50,15 +52,15 @@ const Row = ({
     } else if (cells[idx][i] == -1) {
       return 'bg-yellow-500'
     }
-    return ''
+    return 'bg-gray-500'
   }
   return (
-    <div tw="flex flex-row w-full h-1/10">
+    <div tw="flex flex-row w-full h-1/12">
       {row.map((c, i, arr) => {
         if (idx == 0) {
           if (i != 0 && i < arr.length - 1) {
             return (
-              <div key={i} tw="flex w-1/10 h-full">
+              <div key={i} tw="flex w-1/12 h-full">
                 <span tw="mx-auto mt-auto pb-5">{getColumnLabel(i)}</span>
               </div>
             );
@@ -66,17 +68,20 @@ const Row = ({
         }
         if (i == 0) {
           return (
-            <div key={i} tw="flex w-1/10 h-full">
+            <div key={i} tw="flex w-1/12 h-full">
               <span tw="ml-auto my-auto pr-5">{getRowLabel()}</span>
             </div>
           );
         } else if (i > 0 && i < arr.length - 1) {
           const classes =
-            "flex border-2 border-black w-1/10 h-full " +
+            "flex border-2 border-black w-1/12 h-full " +
             getBackgroundColor(i)
           return (
             <div key={i} tw={classes}>
-              <span tw="m-auto">{getTile(c)}</span>
+              {cells[idx][i] == 1 || gameOver
+              ? <span tw="m-auto">{getTile(c)}</span>
+              : <span></span>
+              }
             </div>
           );
         }
@@ -94,9 +99,9 @@ export const generateImage = (
     return <IntroPage />;
   }
   return (
-    <div tw="flex w-full">
+    <div tw="flex w-full h-full bg-orange-200">
       <div tw="flex flex-col w-full">
-        <span tw="text-red-700 pb-10 mx-auto">Board</span>
+        <span tw="text-amber-900 pb-10 mx-auto">Board</span>
         {board.map((r, i, arr) => {
           if (i < arr.length - 1) {
             return (

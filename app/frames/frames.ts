@@ -20,17 +20,17 @@ function getRandomNumber(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export const initGame = (size: number): State => {
+export const initGame = (size: number, mines: number): State => {
   let board: Board = [];
   for (let i = 0; i < size + 2; i++) {
-    board.push(new Array(size + 2).fill(0))
+    board.push(new Array(size + 2).fill(0));
   }
 
   //----------------------------------------
   // Randomly place mines
   //----------------------------------------
 
-  let num = getRandomNumber(size - 2, size + 4)
+  let num = mines
   while (num > 0) {
     const i = getRandomNumber(1, size);
     const j = getRandomNumber(1, size);
@@ -62,11 +62,11 @@ export const initGame = (size: number): State => {
 
   let cells: Cell[][] = [];
   for (let i = 0; i < size + 2; i++) {
-    cells.push(new Array(size + 2).fill(0))
+    cells.push(new Array(size + 2).fill(0));
   }
 
-  return { board, cells }
-}
+  return { board, cells };
+};
 
 export type Input = {
   row: number
