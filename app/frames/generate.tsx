@@ -13,19 +13,46 @@ const IntroPage = () => {
   )
 }
 
-const Row = ({ row }: { row: number[]}) => {
+const Row = ({ row, idx }: { row: number[], idx: number }) => {
   const getTile = (value: number) => {
     if (value == -1) {
       return 'X'
     }
     return value;
   }
+  const getRowLabel = () => {
+    if (idx == 0) {
+      return ''
+    }
+    return `${idx}`
+  }
+  const getColumnLabel = (i: number) => {
+    return String.fromCharCode('a'.charCodeAt(0)+i-1)
+  }
   return (
-    <div tw="flex flex-row">
+    <div tw="flex flex-row w-full h-1/5">
       {row.map((c, i, arr) => {
-        if (i > 0 && i < arr.length - 1) {
+        if (idx == 0) {
+          if (i != 0 && i < arr.length - 1) {
+            return (
+              <div tw="flex w-1/5 h-full">
+                <span tw="mx-auto mt-auto pb-5">{getColumnLabel(i)}</span>
+              </div>
+            )
+          }
+        }
+        if (i == 0) {
           return (
-            <span key={i} tw="w-1/10 h-1/10">{getTile(c)}</span>
+            <div tw="flex w-1/5 h-full">
+              <span tw="ml-auto my-auto pr-5">{getRowLabel()}</span>
+            </div>
+          )
+        }
+        else if (i > 0 && i < arr.length - 1) {
+          return (
+            <div key={i} tw="flex border-2 border-black w-1/5 h-full">
+              <span tw="m-auto">{getTile(c)}</span>
+            </div>
           )
         }
       })}
@@ -38,13 +65,13 @@ export const generateImage = (fid: number | undefined, board: Board) => {
     return <IntroPage />
   }
   return (
-    <div tw="flex">
-      <div tw="flex flex-col">
-      <span tw="text-red-700 pb-10">Board</span>
+    <div tw="flex w-full">
+      <div tw="flex flex-col w-full">
+      <span tw="text-red-700 pb-10 mx-auto">Board</span>
         {board.map((r, i, arr) => {
-          if (i > 0 && i < arr.length - 1) {
+          if (i < arr.length - 1) {
             return (
-              <Row key={i} row={r} />
+              <Row key={i} row={r} idx={i} />
             )
           }
         })}
