@@ -23,13 +23,13 @@ const handleRequest = frames(async (ctx) => {
     shown
   }
 
-  //printBoard(board)
+  printBoard(board)
   return {
-    image: generateImage(fid, currentState),
+    image: generateImage(fid, board),
     imageOptions: {
         aspectRatio: '1:1'
     },
-    textInput: 'Move:',
+    textInput: fid ? 'Move:' : undefined,
     buttons: [
       <Button action="post" target={getHostName() + "/frames?value=Yes"}>
         Say Yes

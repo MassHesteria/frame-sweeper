@@ -1,4 +1,4 @@
-import { State } from "./frames";
+import { Board } from "./frames";
 
 const IntroPage = () => {
   return (
@@ -25,7 +25,7 @@ const Row = ({ row }: { row: number[]}) => {
       {row.map((c, i, arr) => {
         if (i > 0 && i < arr.length - 1) {
           return (
-            <span tw="w-1/10 h-1/10">{getTile(c)}</span>
+            <span key={i} tw="w-1/10 h-1/10">{getTile(c)}</span>
           )
         }
       })}
@@ -33,16 +33,18 @@ const Row = ({ row }: { row: number[]}) => {
   )
 }
 
-export const generateImage = (fid: number | undefined, state: State) => {
+export const generateImage = (fid: number | undefined, board: Board) => {
   if (fid == undefined) {
     return <IntroPage />
   }
   return (
+    <div tw="flex">
       <div tw="flex flex-col">
-        {state.board.map((r, i, arr) => {
+      <span tw="text-red-700 pb-10">Board</span>
+        {board.map((r, i, arr) => {
           if (i > 0 && i < arr.length - 1) {
             return (
-              <Row row={r} />
+              <Row key={i} row={r} />
             )
           }
         })}
@@ -57,5 +59,6 @@ export const generateImage = (fid: number | undefined, state: State) => {
             : 'no text'}
           </span>*/}
       </div>
+    </div>
   )
 }

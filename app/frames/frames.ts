@@ -36,6 +36,21 @@ export const createBoard = (size: number) => {
     num -= 1;
   }
 
+  for (let i = 1; i <= size; i++) {
+    for (let j = 1; j <= size; j++) {
+      if (board[i][j] == -1) {
+        continue
+      }
+      for (let k = i - 1; k <= i + 1; k++) {
+        for (let l = j - 1; l <= j + 1; l++) {
+          if (board[k][l] == -1) {
+            board[i][j] += 1
+          }
+        }
+      }
+    }
+  }
+
   return board
 }
 
