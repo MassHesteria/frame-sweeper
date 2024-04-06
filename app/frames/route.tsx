@@ -7,14 +7,33 @@ import { generateImage } from "./generate";
 const handleRequest = frames(async (ctx) => {
   const currentState = ctx.state;
   const fid = ctx.message?.requesterFid;
+
+  const timestamp = `${Date.now()}`
+  const baseRoute = getHostName() + "/frames?ts=" + timestamp
   
   let board = currentState.board;
   let shown = currentState.shown;
-  if (fid) {
-    if (board.length == 0) {
+  if (fid != undefined) {
+    if (board.length == 0 || ctx.searchParams.newGame) {
       board = createBoard(3)
       shown = initShown(3)
     }
+  } else {
+      return ({
+        image: generateImage(fid, board),
+        imageOptions: {
+            aspectRatio: '1.91:1'
+        },
+        buttons: [
+          <Button action="post" target={baseRoute + "&newGame=1"}>
+            Start Playing
+          </Button>
+        ],
+        headers: { 
+          // Max cache age in seconds
+          "Cache-Control": "max-age=0", 
+        }
+    })
   }
 
   const updatedState = {
@@ -29,13 +48,13 @@ const handleRequest = frames(async (ctx) => {
     imageOptions: {
         aspectRatio: '1:1'
     },
-    textInput: fid ? 'Move:' : undefined,
+    textInput: fid ? 'Move: a2, c1, etc.' : undefined,
     buttons: [
-      <Button action="post" target={getHostName() + "/frames?value=Yes"}>
-        Say Yes
+      <Button action="post" target={baseRoute + "&makeMove=1"}>
+        Make Move
       </Button>,
-      <Button action="post" target={getHostName() + "/frames?value=No"}>
-        Say No
+      <Button action="post" target={baseRoute + "&newGame=1"}>
+        New Game ↻
       </Button>,
     ],
     state: updatedState,

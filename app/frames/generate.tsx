@@ -35,7 +35,7 @@ const Row = ({ row, idx }: { row: number[], idx: number }) => {
         if (idx == 0) {
           if (i != 0 && i < arr.length - 1) {
             return (
-              <div tw="flex w-1/5 h-full">
+              <div key={i} tw="flex w-1/5 h-full">
                 <span tw="mx-auto mt-auto pb-5">{getColumnLabel(i)}</span>
               </div>
             )
@@ -43,7 +43,7 @@ const Row = ({ row, idx }: { row: number[], idx: number }) => {
         }
         if (i == 0) {
           return (
-            <div tw="flex w-1/5 h-full">
+            <div key={i} tw="flex w-1/5 h-full">
               <span tw="ml-auto my-auto pr-5">{getRowLabel()}</span>
             </div>
           )
