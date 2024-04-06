@@ -13,22 +13,30 @@ const IntroPage = () => {
   )
 }
 
-const Row = ({ row, idx }: { row: number[], idx: number }) => {
+const Row = ({
+  row,
+  idx,
+  shown,
+}: {
+  row: number[];
+  idx: number;
+  shown: boolean[][];
+}) => {
   const getTile = (value: number) => {
     if (value == -1) {
-      return 'X'
+      return "X";
     }
     return value;
-  }
+  };
   const getRowLabel = () => {
     if (idx == 0) {
-      return ''
+      return "";
     }
-    return `${idx}`
-  }
+    return `${idx}`;
+  };
   const getColumnLabel = (i: number) => {
-    return String.fromCharCode('a'.charCodeAt(0)+i-1)
-  }
+    return String.fromCharCode("a".charCodeAt(0) + i - 1);
+  };
   return (
     <div tw="flex flex-row w-full h-1/5">
       {row.map((c, i, arr) => {
@@ -38,7 +46,7 @@ const Row = ({ row, idx }: { row: number[], idx: number }) => {
               <div key={i} tw="flex w-1/5 h-full">
                 <span tw="mx-auto mt-auto pb-5">{getColumnLabel(i)}</span>
               </div>
-            )
+            );
           }
         }
         if (i == 0) {
@@ -46,33 +54,37 @@ const Row = ({ row, idx }: { row: number[], idx: number }) => {
             <div key={i} tw="flex w-1/5 h-full">
               <span tw="ml-auto my-auto pr-5">{getRowLabel()}</span>
             </div>
-          )
-        }
-        else if (i > 0 && i < arr.length - 1) {
+          );
+        } else if (i > 0 && i < arr.length - 1) {
+          const classes =
+            "flex border-2 border-black w-1/5 h-full" +
+            (shown[idx][i] ? " bg-orange-700" : "");
           return (
-            <div key={i} tw="flex border-2 border-black w-1/5 h-full">
+            <div key={i} tw={classes}>
               <span tw="m-auto">{getTile(c)}</span>
             </div>
-          )
+          );
         }
       })}
     </div>
-  )
-}
+  );
+};
 
-export const generateImage = (fid: number | undefined, board: Board) => {
+export const generateImage = (
+  fid: number | undefined,
+  board: Board,
+  shown: boolean[][]
+) => {
   if (fid == undefined) {
-    return <IntroPage />
+    return <IntroPage />;
   }
   return (
     <div tw="flex w-full">
       <div tw="flex flex-col w-full">
-      <span tw="text-red-700 pb-10 mx-auto">Board</span>
+        <span tw="text-red-700 pb-10 mx-auto">Board</span>
         {board.map((r, i, arr) => {
           if (i < arr.length - 1) {
-            return (
-              <Row key={i} row={r} idx={i} />
-            )
+            return <Row key={i} row={r} idx={i} shown={shown} />;
           }
         })}
         {/*<span>
@@ -87,5 +99,5 @@ export const generateImage = (fid: number | undefined, board: Board) => {
           </span>*/}
       </div>
     </div>
-  )
-}
+  );
+};

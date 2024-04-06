@@ -20,7 +20,7 @@ const handleRequest = frames(async (ctx) => {
     }
   } else {
       return ({
-        image: generateImage(fid, board),
+        image: generateImage(fid, board, shown),
         imageOptions: {
             aspectRatio: '1.91:1'
         },
@@ -42,11 +42,16 @@ const handleRequest = frames(async (ctx) => {
     shown
   }
 
-  console.log(parseInput(ctx.message?.inputText))
+  const input = parseInput(ctx.message?.inputText)
+  if (input != undefined) {
+    shown[input.row][input.col] = true
+  }
+  console.log(shown)
+  //console.log(parseInput(ctx.message?.inputText))
 
   printBoard(board)
   return {
-    image: generateImage(fid, board),
+    image: generateImage(fid, board, shown),
     imageOptions: {
         aspectRatio: '1:1'
     },

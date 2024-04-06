@@ -56,8 +56,8 @@ export const createBoard = (size: number) => {
 
 export const initShown = (size: number) => {
   let shown: boolean[][] = [];
-  for (let i = 0; i < size; i++) {
-    shown.push(new Array(size).fill(false))
+  for (let i = 0; i < size + 2; i++) {
+    shown.push(new Array(size + 2).fill(false))
   }
   return shown
 }
