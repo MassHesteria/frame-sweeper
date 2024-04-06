@@ -24,7 +24,10 @@ const Row = ({
   cells: Cell[][];
   gameOver: boolean;
 }) => {
-  const getTile = (value: number) => {
+  const getTile = (value: number, col: number) => {
+    if (cells[idx][col] == -1) {
+      return '🔷'
+    }
     if (value == -1) {
       return "X";
     } else if (value == 0) {
@@ -49,19 +52,20 @@ const Row = ({
     }
     if (cells[idx][i] == 1) {
       return 'bg-green-500'
-    } else if (cells[idx][i] == -1) {
-      return 'bg-yellow-500'
     }
+    /*else if (cells[idx][i] == -1) {
+      return 'bg-yellow-500'
+    }*/
     return 'bg-gray-500'
   }
   return (
-    <div tw="flex flex-row w-full h-1/12">
+    <div tw="flex flex-row w-full h-1/12 pl-20">
       {row.map((c, i, arr) => {
         if (idx == 0) {
           if (i != 0 && i < arr.length - 1) {
             return (
               <div key={i} tw="flex w-1/12 h-full">
-                <span tw="mx-auto mt-auto pb-5">{getColumnLabel(i)}</span>
+                <span tw="mx-auto mt-auto pb-5 text-amber-900">{getColumnLabel(i)}</span>
               </div>
             );
           }
@@ -69,7 +73,7 @@ const Row = ({
         if (i == 0) {
           return (
             <div key={i} tw="flex w-1/12 h-full">
-              <span tw="ml-auto my-auto pr-5">{getRowLabel()}</span>
+              <span tw="ml-auto my-auto pr-5 text-amber-900">{getRowLabel()}</span>
             </div>
           );
         } else if (i > 0 && i < arr.length - 1) {
@@ -78,8 +82,8 @@ const Row = ({
             getBackgroundColor(i)
           return (
             <div key={i} tw={classes}>
-              {cells[idx][i] == 1 || gameOver
-              ? <span tw="m-auto">{getTile(c)}</span>
+              {cells[idx][i] != 0 || gameOver
+              ? <span tw="m-auto text-6xl">{getTile(c, i)}</span>
               : <span></span>
               }
             </div>
@@ -101,7 +105,7 @@ export const generateImage = (
   return (
     <div tw="flex w-full h-full bg-orange-200">
       <div tw="flex flex-col w-full">
-        <span tw="text-amber-900 pb-10 mx-auto">Board</span>
+        <span tw="text-amber-900 pb-5 mx-auto text-6xl pt-5">Minesweeper</span>
         {board.map((r, i, arr) => {
           if (i < arr.length - 1) {
             return (
@@ -115,16 +119,6 @@ export const generateImage = (
             );
           }
         })}
-        {/*<span>
-          {ctx.pressedButton
-            ? `I clicked ${ctx.searchParams.value}`
-            : `Click some button`}
-        </span>
-        <span>
-          {ctx.message?.inputText
-            ? `Text: ${ctx.message.inputText}`
-            : 'no text'}
-          </span>*/}
       </div>
     </div>
   );
