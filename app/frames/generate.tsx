@@ -6,7 +6,8 @@ const IntroPage = () => {
       <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-center p-8">
         <h2 tw="flex flex-col font-bold tracking-tight text-left">
           <span tw="font-bold pb-5 text-8xl text-amber-900">Minesweeper</span>
-          <span tw="font-bold pb-6 text-5xl text-amber-700">Follow MassHesteria to Play</span>
+          <span tw="font-bold pb-6 text-5xl text-amber-700">by MassHesteria</span>
+          <span tw="font-bold pt-16 text-6xl text-amber-900">Follow to Play!</span>
         </h2>
       </div>
     </div>
@@ -66,9 +67,6 @@ const Row = ({
     if (cells[idx][i] == 1) {
       return 'bg-orange-300'
     }
-    /*else if (cells[idx][i] == -1) {
-      return 'bg-yellow-500'
-    }*/
     return 'bg-orange-400'
   }
   return (
@@ -114,11 +112,6 @@ export const generateImage = (
   }
   return (
     <div tw="flex w-full h-full bg-orange-200">
-
-    {/*<div tw="fixed inset-0 flex items-center justify-center">
-        <p>This div is centered in the middle of the screen.</p>
-  </div>*/}
-
       <div tw="flex flex-col w-full">
         <span tw="text-amber-900 pb-3 mx-auto text-6xl pt-7">Minesweeper</span>
         {board.map((r, i, arr) => {
@@ -135,8 +128,8 @@ export const generateImage = (
           }
         })}
         {isBoardCleared(board, cells) &&
-          <span tw="bg-gray-200 p-4 shadow-xl text-9xl rounded-md m-7"
-                style={{position: 'absolute', top: '500px', left: '300px'}}>
+          <span tw="bg-gray-200 px-10 py-6 text-black-900 shadow-xl text-9xl rounded-lg opacity-95"
+                style={{position: 'absolute', top: '500px', left: '300px' }}>
                 You win!
           </span>}
       </div>

@@ -3,16 +3,26 @@ import { Button } from "frames.js/next";
 import { initGame, frames, parseInputText, printBoard, isBoardCleared, openedBomb } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
+import { JsonObject } from "frames.js/types";
  
 const handleRequest = frames(async (ctx) => {
-  const currentState = ctx.state;
   const fid = ctx.message?.requesterFid;
+  const caster = ctx.message?.castId?.fid;
+
+  let follows = false
+  const msg = ctx.message as JsonObject;
+  if (msg) {
+    if (msg['requesterFollowsCaster']) {
+      follows = true;
+    } else if (fid && caster && fid === caster) {
+      follows = true;
+    }
+  }
 
   const timestamp = `${Date.now()}`
   const baseRoute = getHostName() + "/frames?ts=" + timestamp
   
-  let board = currentState.board;
-  let cells = currentState.cells;
+  let { board, cells } = ctx.state;
   if (fid != undefined) {
     if (board.length == 0 || ctx.searchParams.newGame) {
       const game = initGame(9, 10)

@@ -1,3 +1,4 @@
+import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames } from "frames.js/next";
 
 export type Board = number[][];
@@ -14,6 +15,7 @@ export const frames = createFrames<State>({
     board: [],
     cells: []
   },
+  middleware: [farcasterHubContext()]
 });
 
 function getRandomNumber(min: number, max: number) {
