@@ -73,14 +73,22 @@ export type Input = {
   col: number
 }
 
-export const parseInput = (text: string|undefined): Input | undefined => {
-  if (text == undefined || text.length != 2) {
+export const parseInputText = (text: string|undefined): Input[] | undefined => {
+  if (text == undefined) {
     return undefined
   }
-  //TODO: Make this much better
-  const col = text.charCodeAt(0) - 'a'.charCodeAt(0) + 1
-  const row = text.charCodeAt(1) - '0'.charCodeAt(0)
-  return { row, col }
+  const inputs = text.split(',').map(a => a.trim())
+
+  const results: Input[] = [];
+  for (let i = 0; i < inputs.length; i++) {
+    if (inputs[i].length != 2) {
+      return undefined
+    }
+    const col = inputs[i].charCodeAt(0) - 'a'.charCodeAt(0) + 1
+    const row = inputs[i].charCodeAt(1) - '0'.charCodeAt(0)
+    results.push({ row, col })
+  }
+  return results
 }
 
 export const isGameOver = (board: Board, cells: Cell[][]) => {

@@ -2,11 +2,11 @@ import { Board, Cell, isGameOver } from "./frames";
 
 const IntroPage = () => {
   return (
-    <div tw="flex">
+    <div tw="flex bg-orange-200 h-full w-full">
       <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-center p-8">
-        <h2 tw="flex flex-col text-8xl font-bold tracking-tight text-left">
-          <span tw="font-bold pb-5" style={{color: "#b16286"}}>Minesweeper</span>
-          <span tw="font-bold" style={{color: "#8ec07c"}}>by MassHesteria</span>
+        <h2 tw="flex flex-col font-bold tracking-tight text-left">
+          <span tw="font-bold pb-5 text-8xl text-amber-900">Minesweeper</span>
+          <span tw="font-bold pb-6 text-5xl text-amber-700">Follow MassHesteria to Play</span>
         </h2>
       </div>
     </div>
@@ -26,12 +26,21 @@ const Row = ({
 }) => {
   const getTile = (value: number, col: number) => {
     if (cells[idx][col] == -1) {
-      return '🔷'
+      return '🔴'
     }
     if (value == -1) {
       return "X";
     } else if (value == 0) {
       return ' '
+    }
+    if (value == 1) {
+      return <span tw="text-blue-800">1</span>
+    } else if (value == 2) {
+      return <span tw="text-green-900">2</span>
+    } else if (value == 3) {
+      return <span tw="text-red-900">3</span>
+    } else if (value == 4) {
+      return <span tw="text-purple-800">4</span>
     }
     return value;
   };
@@ -51,15 +60,15 @@ const Row = ({
       }
     }
     if (cells[idx][i] == 1) {
-      return 'bg-green-500'
+      return 'bg-zinc-500'
     }
     /*else if (cells[idx][i] == -1) {
       return 'bg-yellow-500'
     }*/
-    return 'bg-gray-500'
+    return 'bg-gray-400'
   }
   return (
-    <div tw="flex flex-row w-full h-1/12 pl-20">
+    <div tw="flex flex-row w-full h-1/12 pl-22">
       {row.map((c, i, arr) => {
         if (idx == 0) {
           if (i != 0 && i < arr.length - 1) {
@@ -104,8 +113,13 @@ export const generateImage = (
   }
   return (
     <div tw="flex w-full h-full bg-orange-200">
+
+    {/*<div tw="fixed inset-0 flex items-center justify-center">
+        <p>This div is centered in the middle of the screen.</p>
+  </div>*/}
+
       <div tw="flex flex-col w-full">
-        <span tw="text-amber-900 pb-5 mx-auto text-6xl pt-5">Minesweeper</span>
+        <span tw="text-amber-900 pb-3 mx-auto text-6xl pt-7">Minesweeper</span>
         {board.map((r, i, arr) => {
           if (i < arr.length - 1) {
             return (

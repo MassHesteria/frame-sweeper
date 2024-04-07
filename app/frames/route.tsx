@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
-import { initGame, frames, isGameOver, parseInput, printBoard } from "./frames";
+import { initGame, frames, isGameOver, parseInputText, printBoard } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
  
@@ -43,14 +43,39 @@ const handleRequest = frames(async (ctx) => {
     cells
   }
 
-  if (!isGameOver(board, cells)) {
-    const input = parseInput(ctx.message?.inputText)
-    if (input != undefined) {
-      if (ctx.searchParams.markMine) {
-        cells[input.row][input.col] = -1
-      } else {
-        cells[input.row][input.col] = 1
+  const showNeighors = (row: number, col: number) => {
+    for (let i = row - 1; i <= row + 1; i++) {
+      if (i == 0 || i == board.length - 1) {
+        continue
       }
+      for (let j = col - 1; j <= col + 1; j++) {
+        if (j == 0 || j == board.length - 1) {
+          continue
+        }
+        if (board[i][j] == -1 || cells[i][j] == 1) {
+          continue
+        }
+        cells[i][j] = 1;
+        if (board[i][j] == 0) {
+          showNeighors(i, j);
+        }
+      }
+    }
+  }
+
+  if (!isGameOver(board, cells)) {
+    const inputs = parseInputText(ctx.message?.inputText)
+    if (inputs != undefined) {
+      inputs.forEach(input => {
+        if (ctx.searchParams.markMine) {
+          cells[input.row][input.col] = -1
+        } else {
+          cells[input.row][input.col] = 1
+          if (board[input.row][input.col] == 0) {
+            showNeighors(input.row, input.col)
+          }
+        }
+      })
     }
     //console.log(cells)
   }
