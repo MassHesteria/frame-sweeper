@@ -3,7 +3,8 @@ import { getHostName } from "./data";
  
 export async function generateMetadata() {
   return {
-    title: "My Page",
+    title: "Minesweeper!",
+    description: "Play Minesweeper in a Frame",
     // provide a full URL to your /frames endpoint
     other: await fetchMetadata(
       new URL("/frames", getHostName())
@@ -14,7 +15,8 @@ export async function generateMetadata() {
 export default function Home() {
   return (
     <main>
-      <div>Frame Sweeper</div>
+      <div>Minesweeper Frame for Farcaster</div>
+      <div><a className="text-red-600 no-underline hover:underline" href="https://github.com/masshesteria/frame-sweeper">Source code</a></div>
     </main>
   );
 }

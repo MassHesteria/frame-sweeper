@@ -23,7 +23,7 @@ const handleRequest = frames(async (ctx) => {
   const baseRoute = getHostName() + "/frames?ts=" + timestamp
   
   let { board, cells } = ctx.state;
-  if (fid != undefined) {
+  if (fid != undefined && follows) {
     if (board.length == 0 || ctx.searchParams.newGame) {
       const game = initGame(9, 10)
       board = game.board
@@ -68,21 +68,22 @@ const handleRequest = frames(async (ctx) => {
   }
 
   //console.log('processing input:',ctx.message?.inputText)
-  const inputs = parseInputText(ctx.message?.inputText)
+  const inputs = parseInputText(ctx.message?.inputText, board.length - 1);
   if (inputs != undefined) {
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       if (ctx.searchParams.markMine) {
         // Don't mark cells that are already open
         if (cells[input.row][input.col] != 1) {
-          cells[input.row][input.col] = -1
+          cells[input.row][input.col] = -1;
         }
-      } else {
-        cells[input.row][input.col] = 1
+      } else if (ctx.searchParams.openCell) {
+        cells[input.row][input.col] = 1;
+        // Show neighbors if a cell with no adjacent mines is opened
         if (board[input.row][input.col] == 0) {
-          showNeighors(input.row, input.col)
+          showNeighors(input.row, input.col);
         }
       }
-    })
+    });
   }
 
   const gameEnded =
@@ -90,11 +91,11 @@ const handleRequest = frames(async (ctx) => {
 
   //printBoard(board)
   return {
-    image: generateImage(fid, board, cells),
+    image: generateImage(follows ? fid : undefined, board, cells),
     imageOptions: {
         aspectRatio: '1:1'
     },
-    textInput: (fid && !gameEnded) ? 'Enter Cell: a2, c1, etc.' : undefined,
+    textInput: (fid && !gameEnded) ? 'Enter Cells: a2 c1 i7 ...' : undefined,
     buttons: gameEnded
       ? [
         <Button action="post" target={baseRoute + "&newGame=1"}>
@@ -102,10 +103,10 @@ const handleRequest = frames(async (ctx) => {
         </Button>,
       ] : [
       <Button action="post" target={baseRoute + "&markMine=1"}>
-        Mark Mine
+        Mark Mines
       </Button>,
-      <Button action="post" target={baseRoute + "&makeMove=1"}>
-        Open Cell
+      <Button action="post" target={baseRoute + "&openCell=1"}>
+        Open Cells
       </Button>,
     ],
     state: {

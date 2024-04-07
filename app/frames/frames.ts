@@ -75,22 +75,24 @@ export type Input = {
   col: number
 }
 
-export const parseInputText = (text: string|undefined): Input[] | undefined => {
+export const parseInputText = (text: string|undefined, size: number): Input[] | undefined => {
   if (text == undefined) {
     return undefined
   }
-  const inputs = text.split(',').map(a => a.trim())
+  const inputs =
+    text.includes(',')
+    ? text.split(',').map(a => a.trim())
+    : text.split(' ').map(a => a.trim())
 
-  const results: Input[] = [];
-  for (let i = 0; i < inputs.length; i++) {
-    if (inputs[i].length != 2) {
-      return undefined
-    }
-    const col = inputs[i].charCodeAt(0) - 'a'.charCodeAt(0) + 1
-    const row = inputs[i].charCodeAt(1) - '0'.charCodeAt(0)
-    results.push({ row, col })
-  }
-  return results
+  return inputs
+    .filter(i => i.length == 2)
+    .map(i => {
+      return {
+        col: i.charCodeAt(0) - 'a'.charCodeAt(0) + 1,
+        row: i.charCodeAt(1) - '0'.charCodeAt(0),
+      }
+    })
+    .filter(i => i.row > 0 && i.col > 0 && i.row < size && i.col < size)
 }
 
 export const openedBomb = (board: Board, cells: Cell[][]) => {
