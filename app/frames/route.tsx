@@ -24,7 +24,7 @@ const handleRequest = frames(async (ctx: any) => {
     encodeURIComponent(getHostName());
   
   let { board, cells } = ctx.state;
-  if (fid != undefined && follows) {
+  if (fid != undefined) {
     if (board.length == 0 || ctx.searchParams.newGame) {
       const game = initGame(9, 10)
       board = game.board
@@ -32,7 +32,7 @@ const handleRequest = frames(async (ctx: any) => {
     }
   } else {
       return ({
-        image: generateImage(fid, board, cells),
+        image: generateImage(fid, board, cells, false, false),
         imageOptions: {
             aspectRatio: '1.91:1'
         },
@@ -90,12 +90,13 @@ const handleRequest = frames(async (ctx: any) => {
     });
   }
 
-  const gameEnded =
-    openedBomb(board, cells) || isBoardCleared(board, cells);
+  const gameOver = openedBomb(board, cells)
+  const boardCleared = isBoardCleared(board, cells)
+  const gameEnded = gameOver || boardCleared
 
   //printBoard(board)
   return {
-    image: generateImage(follows ? fid : undefined, board, cells),
+    image: generateImage(fid, board, cells, gameOver, boardCleared),
     imageOptions: {
         aspectRatio: '1:1'
     },

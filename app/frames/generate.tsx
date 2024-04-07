@@ -1,13 +1,13 @@
-import { Board, Cell, isBoardCleared, openedBomb } from "./frames";
+import { Board, Cell } from "./frames";
 
 const IntroPage = () => {
   return (
     <div tw="flex bg-orange-200 h-full w-full">
       <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-center p-8">
         <h2 tw="flex flex-col font-bold tracking-tight text-left">
-          <span tw="font-bold pb-5 text-8xl text-amber-900">Minesweeper</span>
-          <span tw="font-bold pb-6 text-5xl text-amber-700">by MassHesteria</span>
-          <span tw="font-bold pt-16 text-6xl text-amber-900">Follow to Play!</span>
+          <span tw="pb-5 text-8xl text-amber-900">Minesweeper</span>
+          <span tw="pb-6 text-5xl text-amber-700">by MassHesteria</span>
+          <span tw="pt-16 text-6xl text-amber-900">Follow to Play!</span>
         </h2>
       </div>
     </div>
@@ -26,23 +26,29 @@ const Row = ({
   gameOver: boolean;
 }) => {
   const getTile = (value: number, col: number) => {
+    // Marked the cell as a mine?
     if (cells[idx][col] == -1) {
       return '🔴'
     }
+
+    // Unopened or opened without adjacent mines
     if (cells[idx][col] == 0 || value == 0) {
       return ' '
     }
-    if (value == -1) {
-      return "X";
-    }
-    if (value == 1) {
-      return <span tw="text-blue-800">1</span>
-    } else if (value == 2) {
-      return <span tw="text-green-900">2</span>
-    } else if (value == 3) {
-      return <span tw="text-red-900">3</span>
-    } else if (value == 4) {
-      return <span tw="text-purple-800">4</span>
+
+    switch (value) {
+      case -1:
+        return "X";
+      case 1:
+        return <span tw="text-blue-800">1</span>
+      case 2:
+        return <span tw="text-green-900">2</span>
+      case 3:
+        return <span tw="text-red-900">3</span>
+      case 4:
+        return <span tw="text-purple-800">4</span>
+      default:
+        break;
     }
     return value;
   };
@@ -53,7 +59,7 @@ const Row = ({
     return `${idx}`;
   };
   const getColumnLabel = (i: number) => {
-    return String.fromCharCode("a".charCodeAt(0) + i - 1);
+    return ['a','b','c','d','e','f','g','h','i'].at(i-1)
   };
   const getBackgroundColor = (i: number) => {
     if (gameOver) {
@@ -105,7 +111,9 @@ const Row = ({
 export const generateImage = (
   fid: number | undefined,
   board: Board,
-  cells: Cell[][]
+  cells: Cell[][],
+  openedBomb: boolean,
+  boardCleared: boolean
 ) => {
   if (fid == undefined) {
     return <IntroPage />;
@@ -114,9 +122,9 @@ export const generateImage = (
   return (
     <div tw="flex w-full h-full bg-orange-200">
       <div tw="flex flex-col w-full">
-        <div tw="flex flex-row w-2/3 pt-7 mx-auto pb-3 justify-between">
-          <span tw="text-amber-900 text-5xl mt-4 text-left">Minesweeper</span>
-          <span tw="text-amber-900 text-5xl mt-4 text-right">Unmarked: {10-numMarked}</span>
+        <div tw="flex flex-row w-2/3 pt-7 mx-auto pb-7 justify-between text-amber-900 text-5xl">
+          <span>Minesweeper</span>
+          <span>Unmarked: {10-numMarked}</span>
         </div>
         {board.map((r, i, arr) => {
           if (i < arr.length - 1) {
@@ -126,12 +134,12 @@ export const generateImage = (
                 row={r}
                 idx={i}
                 cells={cells}
-                gameOver={openedBomb(board, cells)}
+                gameOver={openedBomb}
               />
             );
           }
         })}
-        {isBoardCleared(board, cells) &&
+        {boardCleared &&
           <span tw="bg-gray-200 px-10 py-6 text-black shadow-xl text-9xl rounded-lg opacity-95"
                 style={{position: 'absolute', top: '500px', left: '300px' }}>
                 You win!
