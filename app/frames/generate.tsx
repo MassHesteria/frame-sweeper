@@ -115,8 +115,8 @@ export const generateImage = (
     <div tw="flex w-full h-full bg-orange-200">
       <div tw="flex flex-col w-full">
         <div tw="flex flex-row w-3/4 pt-7 mx-auto pb-3">
-          <span tw="text-amber-900 text-5xl ml-5 mt-3 w-3/5 text-left">Minesweeper</span>
-          <span tw="text-amber-900 text-5xl mt-3 w-2/5 text-right">Unmarked: {10-numMarked}</span>
+          <span tw="text-amber-900 text-5xl ml-5 mt-4 w-3/5 text-left">Minesweeper</span>
+          <span tw="text-amber-900 text-5xl mt-4 w-2/5 text-right">Unmarked: {10-numMarked}</span>
         </div>
         {board.map((r, i, arr) => {
           if (i < arr.length - 1) {

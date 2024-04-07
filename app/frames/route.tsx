@@ -3,7 +3,6 @@ import { Button } from "frames.js/next";
 import { initGame, frames, parseInputText, printBoard, isBoardCleared, openedBomb } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
-import { JsonObject } from "frames.js/types";
  
 const handleRequest = frames(async (ctx: any) => {
   let fid = ctx.message?.requesterFid;
