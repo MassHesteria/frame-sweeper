@@ -81,7 +81,7 @@ const handleRequest = frames(async (ctx) => {
   }
   //console.log(parseInput(ctx.message?.inputText))
 
-  printBoard(board)
+  //printBoard(board)
   return {
     image: generateImage(fid, board, cells),
     imageOptions: {

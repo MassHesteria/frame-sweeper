@@ -1,4 +1,4 @@
-import { Board, Cell, isGameOver } from "./frames";
+import { Board, Cell, isBoardCleared, isGameOver } from "./frames";
 
 const IntroPage = () => {
   return (
@@ -133,6 +133,8 @@ export const generateImage = (
             );
           }
         })}
+        {isBoardCleared(board, cells) && <span tw="bg-white p-4 shadow-lg text-9xl"
+              style={{position: 'absolute', top: '500px', left: '300px'}}>You win!</span>}
       </div>
     </div>
   );

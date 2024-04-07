@@ -102,6 +102,17 @@ export const isGameOver = (board: Board, cells: Cell[][]) => {
   return false
 }
 
+export const isBoardCleared = (board: Board, cells: Cell[][]) => {
+  for (let i = 1; i < board.length - 1; i++) {
+    for (let j = 1; j< board.length - 1; j++) {
+      if (cells[i][j] != 1 && board[i][j] != -1) {
+        return false
+      }
+    }
+  }
+  return true
+}
+
 export const printBoard = (board: Board) => {
   for (let i = 1; i < board.length - 1; i++) {
     let row = ''
