@@ -5,15 +5,13 @@ export type Board = number[][];
 export type Cell = -1|0|1
 
 export type State = {
-  board: Board;
-  cells: Cell[][];
+  data: number[][];
 };
 
 export const frames = createFrames<State>({
   basePath: "/frames",
   initialState: {
-    board: [],
-    cells: []
+    data: [],
   },
   middleware: [farcasterHubContext({
       hubHttpUrl: "https://nemes.farcaster.xyz:2281",
@@ -26,7 +24,7 @@ function getRandomNumber(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export const initGame = (size: number, mines: number): State => {
+export const initGame = (size: number, mines: number) => {
   let board: Board = [];
   for (let i = 0; i < size + 2; i++) {
     board.push(new Array(size + 2).fill(0));

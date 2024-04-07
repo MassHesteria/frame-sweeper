@@ -1,9 +1,48 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
-import { initGame, frames, parseInputText, printBoard, isBoardCleared, openedBomb } from "./frames";
+import {
+   Board,
+   Cell,
+   State,
+   initGame,
+   frames,
+   parseInputText,
+   printBoard,
+   isBoardCleared,
+   openedBomb,
+} from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
- 
+
+const decodeState = (state: State) => {
+  const data = state.data;
+  let board: Board = []
+  let cells: Cell[][] = []
+  for (let i = 0; i < data.length; i++) {
+    board.push(data[i].map(c => (0xF & c) - 1))
+    cells.push(data[i].map(c => (((0xF0 & c) >> 4) - 1) as Cell))
+  }
+  return {
+    board: board,
+    cells: cells,
+  }
+}
+
+const encodeState = (board: Board, cells: Cell[][]) => {
+  let data = [];
+  for (let i = 0; i < board.length; i++) {
+    const b_row = board[i].map(c => c + 1);
+    const c_row = cells[i].map(c => c + 1);
+    for (let j = 0; j < b_row.length; j++) {
+      b_row[j] |= (c_row[j] << 4)
+    }
+    data.push(b_row)
+  }
+  return {
+    data
+  }
+}
+
 const handleRequest = frames(async (ctx: any) => {
   let fid = ctx.message?.requesterFid;
   const caster = ctx.message?.castId?.fid;
@@ -23,32 +62,32 @@ const handleRequest = frames(async (ctx: any) => {
   const shareLink = "https://warpcast.com/~/compose?embeds[]=" +
     encodeURIComponent(getHostName());
   
-  let { board, cells } = ctx.state;
-  if (fid != undefined) {
-    if (board.length == 0 || ctx.searchParams.newGame) {
-      const game = initGame(9, 10)
-      board = game.board
-      cells = game.cells
-    }
-  } else {
-      return ({
-        image: generateImage(fid, board, cells, false, false),
-        imageOptions: {
-            aspectRatio: '1.91:1'
-        },
-        buttons: [
-          <Button action="post" target={baseRoute + "&newGame=1"}>
-            Start Playing 🙂
-          </Button>,
-          <Button action="link" target={shareLink}>
-            Share
-          </Button>
-        ],
-        headers: { 
-          // Max cache age in seconds
-          "Cache-Control": "max-age=0", 
-        }
+  if (fid == undefined) {
+    return ({
+      image: generateImage(fid, [], [], false, false),
+      imageOptions: {
+          aspectRatio: '1.91:1'
+      },
+      buttons: [
+        <Button action="post" target={baseRoute + "&newGame=1"}>
+          Start Playing 🙂
+        </Button>,
+        <Button action="link" target={shareLink}>
+          Share
+        </Button>
+      ],
+      headers: { 
+        // Max cache age in seconds
+        "Cache-Control": "max-age=0", 
+      }
     })
+  }
+
+  let { board, cells } = decodeState(ctx.state);
+  if (board.length == 0 || ctx.searchParams.newGame) {
+    const game = initGame(9, 10)
+    board = game.board
+    cells = game.cells
   }
 
   const showNeighors = (row: number, col: number) => {
@@ -117,10 +156,7 @@ const handleRequest = frames(async (ctx: any) => {
         Open Cells
       </Button>,
     ],
-    state: {
-      board,
-      cells
-    },
+    state: encodeState(board, cells),
     headers: { 
       // Max cache age in seconds
       "Cache-Control": "max-age=0", 
