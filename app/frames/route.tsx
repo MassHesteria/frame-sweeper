@@ -5,19 +5,19 @@ import { getHostName} from "../data";
 import { generateImage } from "./generate";
 import { JsonObject } from "frames.js/types";
  
-const handleRequest = frames(async (ctx) => {
-  const fid = ctx.message?.requesterFid;
+const handleRequest = frames(async (ctx: any) => {
+  let fid = ctx.message?.requesterFid;
   const caster = ctx.message?.castId?.fid;
+  const follows = ctx.message?.requesterFollowsCaster;
 
-  let follows = false
-  const msg = ctx.message as JsonObject;
-  if (msg) {
-    if (msg['requesterFollowsCaster']) {
-      follows = true;
-    } else if (fid && caster && fid === caster) {
-      follows = true;
-    }
+  //console.log('fid:',fid)
+  //console.log('caster:',caster)
+  //console.log('follows:',follows)
+
+  if (caster != fid && !follows) {
+    fid = undefined
   }
+  //console.log('final fid:',fid)
 
   const timestamp = `${Date.now()}`
   const baseRoute = getHostName() + "/frames?ts=" + timestamp
