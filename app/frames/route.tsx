@@ -21,6 +21,8 @@ const handleRequest = frames(async (ctx) => {
 
   const timestamp = `${Date.now()}`
   const baseRoute = getHostName() + "/frames?ts=" + timestamp
+  const shareLink = "https://warpcast.com/~/compose?embeds[]=" +
+    encodeURIComponent(getHostName());
   
   let { board, cells } = ctx.state;
   if (fid != undefined && follows) {
@@ -38,6 +40,9 @@ const handleRequest = frames(async (ctx) => {
         buttons: [
           <Button action="post" target={baseRoute + "&newGame=1"}>
             Start Playing 🙂
+          </Button>,
+          <Button action="link" target={shareLink}>
+            Share
           </Button>
         ],
         headers: { 
@@ -101,6 +106,9 @@ const handleRequest = frames(async (ctx) => {
         <Button action="post" target={baseRoute + "&newGame=1"}>
           Play Again ↻
         </Button>,
+        <Button action="link" target={shareLink}>
+          Share
+        </Button>
       ] : [
       <Button action="post" target={baseRoute + "&markMine=1"}>
         Mark Mines

@@ -132,7 +132,7 @@ export const generateImage = (
           }
         })}
         {isBoardCleared(board, cells) &&
-          <span tw="bg-gray-200 px-10 py-6 text-black-900 shadow-xl text-9xl rounded-lg opacity-95"
+          <span tw="bg-gray-200 px-10 py-6 text-black shadow-xl text-9xl rounded-lg opacity-95"
                 style={{position: 'absolute', top: '500px', left: '300px' }}>
                 You win!
           </span>}
