@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
-import { initGame, frames, isGameOver, parseInputText, printBoard } from "./frames";
+import { initGame, frames, parseInputText, printBoard, isBoardCleared, openedBomb } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
  
@@ -37,12 +37,6 @@ const handleRequest = frames(async (ctx) => {
     })
   }
 
-  const updatedState = {
-    ...currentState,
-    board,
-    cells
-  }
-
   const showNeighors = (row: number, col: number) => {
     for (let i = row - 1; i <= row + 1; i++) {
       if (i == 0 || i == board.length - 1) {
@@ -63,23 +57,26 @@ const handleRequest = frames(async (ctx) => {
     }
   }
 
-  if (!isGameOver(board, cells)) {
-    const inputs = parseInputText(ctx.message?.inputText)
-    if (inputs != undefined) {
-      inputs.forEach(input => {
-        if (ctx.searchParams.markMine) {
+  //console.log('processing input:',ctx.message?.inputText)
+  const inputs = parseInputText(ctx.message?.inputText)
+  if (inputs != undefined) {
+    inputs.forEach(input => {
+      if (ctx.searchParams.markMine) {
+        // Don't mark cells that are already open
+        if (cells[input.row][input.col] != 1) {
           cells[input.row][input.col] = -1
-        } else {
-          cells[input.row][input.col] = 1
-          if (board[input.row][input.col] == 0) {
-            showNeighors(input.row, input.col)
-          }
         }
-      })
-    }
-    //console.log(cells)
+      } else {
+        cells[input.row][input.col] = 1
+        if (board[input.row][input.col] == 0) {
+          showNeighors(input.row, input.col)
+        }
+      }
+    })
   }
-  //console.log(parseInput(ctx.message?.inputText))
+
+  const gameEnded =
+    openedBomb(board, cells) || isBoardCleared(board, cells);
 
   //printBoard(board)
   return {
@@ -87,8 +84,13 @@ const handleRequest = frames(async (ctx) => {
     imageOptions: {
         aspectRatio: '1:1'
     },
-    textInput: fid ? 'Enter Cell: a2, c1, etc.' : undefined,
-    buttons: [
+    textInput: (fid && !gameEnded) ? 'Enter Cell: a2, c1, etc.' : undefined,
+    buttons: gameEnded
+      ? [
+        <Button action="post" target={baseRoute + "&newGame=1"}>
+          Play Again ↻
+        </Button>,
+      ] : [
       <Button action="post" target={baseRoute + "&markMine=1"}>
         Mark Mine
       </Button>,
@@ -96,7 +98,10 @@ const handleRequest = frames(async (ctx) => {
         Open Cell
       </Button>,
     ],
-    state: updatedState,
+    state: {
+      board,
+      cells
+    },
     headers: { 
       // Max cache age in seconds
       "Cache-Control": "max-age=0", 

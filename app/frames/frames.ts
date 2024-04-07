@@ -91,9 +91,9 @@ export const parseInputText = (text: string|undefined): Input[] | undefined => {
   return results
 }
 
-export const isGameOver = (board: Board, cells: Cell[][]) => {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board.length; j++) {
+export const openedBomb = (board: Board, cells: Cell[][]) => {
+  for (let i = 1; i < board.length - 1; i++) {
+    for (let j = 1; j < board.length - 1; j++) {
       if (cells[i][j] == 1 && board[i][j] == -1) {
         return true
       }
@@ -104,7 +104,7 @@ export const isGameOver = (board: Board, cells: Cell[][]) => {
 
 export const isBoardCleared = (board: Board, cells: Cell[][]) => {
   for (let i = 1; i < board.length - 1; i++) {
-    for (let j = 1; j< board.length - 1; j++) {
+    for (let j = 1; j < board.length - 1; j++) {
       if (cells[i][j] != 1 && board[i][j] != -1) {
         return false
       }

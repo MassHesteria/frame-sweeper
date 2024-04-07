@@ -1,4 +1,4 @@
-import { Board, Cell, isBoardCleared, isGameOver } from "./frames";
+import { Board, Cell, isBoardCleared, openedBomb } from "./frames";
 
 const IntroPage = () => {
   return (
@@ -28,10 +28,11 @@ const Row = ({
     if (cells[idx][col] == -1) {
       return '🔴'
     }
+    if (cells[idx][col] == 0 || value == 0) {
+      return ' '
+    }
     if (value == -1) {
       return "X";
-    } else if (value == 0) {
-      return ' '
     }
     if (value == 1) {
       return <span tw="text-blue-800">1</span>
@@ -56,16 +57,19 @@ const Row = ({
   const getBackgroundColor = (i: number) => {
     if (gameOver) {
       if (row[i] == -1) {
+        if (cells[idx][i] == -1) {
+          return 'bg-green-500'
+        }
         return 'bg-red-700'
       }
     }
     if (cells[idx][i] == 1) {
-      return 'bg-zinc-500'
+      return 'bg-orange-300'
     }
     /*else if (cells[idx][i] == -1) {
       return 'bg-yellow-500'
     }*/
-    return 'bg-gray-400'
+    return 'bg-orange-400'
   }
   return (
     <div tw="flex flex-row w-full h-1/12 pl-22">
@@ -87,14 +91,11 @@ const Row = ({
           );
         } else if (i > 0 && i < arr.length - 1) {
           const classes =
-            "flex border-2 border-black w-1/12 h-full " +
+            "flex border-2 border-amber-900 w-1/12 h-full " +
             getBackgroundColor(i)
           return (
             <div key={i} tw={classes}>
-              {cells[idx][i] != 0 || gameOver
-              ? <span tw="m-auto text-6xl">{getTile(c, i)}</span>
-              : <span></span>
-              }
+              <span tw="m-auto text-6xl">{getTile(c, i)}</span>
             </div>
           );
         }
@@ -128,13 +129,16 @@ export const generateImage = (
                 row={r}
                 idx={i}
                 cells={cells}
-                gameOver={isGameOver(board, cells)}
+                gameOver={openedBomb(board, cells)}
               />
             );
           }
         })}
-        {isBoardCleared(board, cells) && <span tw="bg-white p-4 shadow-lg text-9xl"
-              style={{position: 'absolute', top: '500px', left: '300px'}}>You win!</span>}
+        {isBoardCleared(board, cells) &&
+          <span tw="bg-gray-200 p-4 shadow-xl text-9xl rounded-md m-7"
+                style={{position: 'absolute', top: '500px', left: '300px'}}>
+                You win!
+          </span>}
       </div>
     </div>
   );
