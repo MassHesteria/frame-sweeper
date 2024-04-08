@@ -13,11 +13,11 @@ export const frames = createFrames<State>({
   initialState: {
     data: [],
   },
-  middleware: [farcasterHubContext({
+  /*middleware: [farcasterHubContext({
       hubHttpUrl: "https://nemes.farcaster.xyz:2281",
       //hubHttpUrl: "http://localhost:3010/hub",
     }
-  )]
+  )]*/
 });
 
 function getRandomNumber(min: number, max: number) {

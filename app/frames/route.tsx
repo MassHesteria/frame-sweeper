@@ -48,7 +48,8 @@ const encodeState = (board: Board, cells: Cell[][]) => {
 const handleRequest = frames(async (ctx: any) => {
   let fid = ctx.message?.requesterFid;
   const caster = ctx.message?.castId?.fid;
-  const follows = ctx.message?.requesterFollowsCaster;
+  //const follows = ctx.message?.requesterFollowsCaster;
+  const follows = true;
 
   //console.log('fid:',fid)
   //console.log('caster:',caster)
