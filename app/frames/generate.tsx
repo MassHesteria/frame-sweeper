@@ -124,7 +124,10 @@ export const generateImage = (
       <div tw="flex flex-col w-full">
         <div tw="flex flex-row w-2/3 pt-7 mx-auto pb-7 justify-between text-amber-900 text-5xl">
           <span>Minesweeper</span>
-          <span>Unmarked: {10-numMarked}</span>
+          {boardCleared
+          ? <span>You Win!</span>
+          : <span>Unmarked: {10-numMarked}</span>
+          }
         </div>
         {board.map((r, i, arr) => {
           if (i < arr.length - 1) {
@@ -139,11 +142,11 @@ export const generateImage = (
             );
           }
         })}
-        {boardCleared &&
+        {/*boardCleared &&
           <span tw="bg-gray-200 px-10 py-6 text-black shadow-xl text-9xl rounded-lg opacity-95"
                 style={{position: 'absolute', top: '500px', left: '300px' }}>
                 You win!
-          </span>}
+      </span>*/}
       </div>
     </div>
   );
