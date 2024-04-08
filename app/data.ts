@@ -5,6 +5,7 @@ export const getHostName = (): string => {
     console.log('using',process.env['HOST'])
     return process.env['HOST']
   }
+  console.log("not using host")
   const headersList = headers();
   const host = headersList.get('x-forwarded-host');
   const proto = headersList.get('x-forwarded-proto');

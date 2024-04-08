@@ -14,7 +14,7 @@ import {
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
 
-export const runtime = 'edge'
+//export const runtime = 'edge'
 
 const decodeState = (state: State) => {
   const data = state.data;
@@ -79,16 +79,12 @@ const handleRequest = frames(async (ctx: any) => {
           Share
         </Button>
       ],
-      headers: { 
-        // Max cache age in seconds
-        "Cache-Control": "max-age=0", 
-      }
     })
   }
 
   let { board, cells } = decodeState(ctx.state);
   if (board.length == 0 || ctx.searchParams.newGame) {
-    const game = initGame(9, 10)
+    const game = initGame(9, 4)
     board = game.board
     cells = game.cells
   }
@@ -117,12 +113,12 @@ const handleRequest = frames(async (ctx: any) => {
   const inputs = parseInputText(ctx.message?.inputText, board.length - 1);
   if (inputs != undefined) {
     inputs.forEach((input) => {
-      if (ctx.searchParams.markMine) {
+      if (ctx.searchParams.mark) {
         // Don't mark cells that are already open
         if (cells[input.row][input.col] != 1) {
           cells[input.row][input.col] = -1;
         }
-      } else if (ctx.searchParams.openCell) {
+      } else if (ctx.searchParams.open) {
         cells[input.row][input.col] = 1;
         // Show neighbors if a cell with no adjacent mines is opened
         if (board[input.row][input.col] == 0) {
@@ -152,10 +148,10 @@ const handleRequest = frames(async (ctx: any) => {
           Share
         </Button>
       ] : [
-      <Button action="post" target={baseRoute + "&markMine=1"}>
+      <Button action="post" target={baseRoute + "&mark=1"}>
         Mark Mines
       </Button>,
-      <Button action="post" target={baseRoute + "&openCell=1"}>
+      <Button action="post" target={baseRoute + "&open=1"}>
         Open Cells
       </Button>,
     ],
