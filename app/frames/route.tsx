@@ -82,9 +82,11 @@ const handleRequest = frames(async (ctx: any) => {
     })
   }
 
+  console.log('base route:', baseRoute)
+
   let { board, cells } = decodeState(ctx.state);
   if (board.length == 0 || ctx.searchParams.newGame) {
-    const game = initGame(9, 4)
+    const game = initGame(9, 6)
     board = game.board
     cells = game.cells
   }
