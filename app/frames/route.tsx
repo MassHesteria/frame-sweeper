@@ -48,12 +48,9 @@ const encodeState = (board: Board, cells: Cell[][]) => {
 const handleRequest = frames(async (ctx: any) => {
   let fid = ctx.message?.requesterFid;
   const caster = ctx.message?.castId?.fid;
-  //const follows = ctx.message?.requesterFollowsCaster;
-  const follows = true;
+  const follows = ctx.message?.requesterFollowsCaster;
 
-  //console.log('fid:',fid)
-  //console.log('caster:',caster)
-  //console.log('follows:',follows)
+  //console.log('fid:',fid,'caster:',caster,'follows:',follows)
 
   if (caster != fid && !follows) {
     fid = undefined
@@ -82,11 +79,9 @@ const handleRequest = frames(async (ctx: any) => {
     })
   }
 
-  console.log('base route:', baseRoute)
-
   let { board, cells } = decodeState(ctx.state);
   if (board.length == 0 || ctx.searchParams.newGame) {
-    const game = initGame(9, 6)
+    const game = initGame(9, 10)
     board = game.board
     cells = game.cells
   }
