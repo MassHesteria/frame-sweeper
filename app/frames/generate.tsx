@@ -28,7 +28,8 @@ const Row = ({
   const getTile = (value: number, col: number) => {
     // Marked the cell as a mine?
     if (cells[idx][col] == -1) {
-      return '🔴'
+      //return '🔴'
+      return 'X'
     }
 
     // Unopened or opened without adjacent mines
