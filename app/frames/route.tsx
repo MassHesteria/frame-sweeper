@@ -14,6 +14,8 @@ import {
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
 
+export const runtime = 'edge'
+
 const decodeState = (state: State) => {
   const data = state.data;
   let board: Board = []
