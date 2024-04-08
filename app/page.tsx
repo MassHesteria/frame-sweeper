@@ -1,5 +1,7 @@
 import { fetchMetadata } from "frames.js/next";
 import { getHostName } from "./data";
+
+export const runtime = 'edge'
  
 export async function generateMetadata() {
   return {
