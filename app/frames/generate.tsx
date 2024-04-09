@@ -1,5 +1,6 @@
 import { Board, Cell } from "./frames";
 import { IntroPage } from "./components/intro";
+import { HeaderRow } from "./components/header";
 
 const Row = ({
   row,
@@ -40,15 +41,6 @@ const Row = ({
     }
     return value;
   };
-  const getRowLabel = () => {
-    if (idx == 0) {
-      return "";
-    }
-    return `${idx}`;
-  };
-  const getColumnLabel = (i: number) => {
-    return ['a','b','c','d','e','f','g','h','i'].at(i-1)
-  };
   const getBackgroundColor = (i: number) => {
     if (gameOver) {
       if (row[i] == -1) {
@@ -63,30 +55,16 @@ const Row = ({
     }
     return 'bg-orange-400'
   }
+  const classes = "flex border-2 border-amber-900 w-1/12 h-full ";
   return (
     <div tw="flex flex-row w-full h-1/12 pl-22">
+      <div tw="flex w-1/12 h-full">
+        <span tw="ml-auto my-auto pr-5 text-amber-900">{idx}</span>
+      </div>
       {row.map((c, i, arr) => {
-        if (idx == 0) {
-          if (i != 0 && i < arr.length - 1) {
-            return (
-              <div key={i} tw="flex w-1/12 h-full">
-                <span tw="mx-auto mt-auto pb-5 text-amber-900">{getColumnLabel(i)}</span>
-              </div>
-            );
-          }
-        }
-        if (i == 0) {
+        if (i > 0 && i < arr.length - 1) {
           return (
-            <div key={i} tw="flex w-1/12 h-full">
-              <span tw="ml-auto my-auto pr-5 text-amber-900">{getRowLabel()}</span>
-            </div>
-          );
-        } else if (i > 0 && i < arr.length - 1) {
-          const classes =
-            "flex border-2 border-amber-900 w-1/12 h-full " +
-            getBackgroundColor(i)
-          return (
-            <div key={i} tw={classes}>
+            <div key={i} tw={classes + getBackgroundColor(i)}>
               <span tw="m-auto text-6xl">{getTile(c, i)}</span>
             </div>
           );
@@ -117,8 +95,9 @@ export const generateImage = (
           : <span>Unmarked: {10-numMarked}</span>
           }
         </div>
+        <HeaderRow />
         {board.map((r, i, arr) => {
-          if (i < arr.length - 1) {
+          if (i > 0 && i < arr.length - 1) {
             return (
               <Row
                 key={i}
