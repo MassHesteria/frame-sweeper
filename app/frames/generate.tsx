@@ -88,12 +88,10 @@ export const generateImage = (
   return (
     <div tw="flex w-full h-full bg-orange-200">
       <div tw="flex flex-col w-full">
-        <div tw="flex flex-row w-3/5 pt-7 mx-auto pb-5 justify-between text-amber-900 text-4xl">
-          <span>Minesweeper</span>
-          {boardCleared
-          ? <span>You Win!</span>
-          : <span>Unmarked: {10-numMarked}</span>
-          }
+        <div tw="flex flex-row pt-7 mx-auto pb-5 justify-between text-amber-900 text-4xl"
+             style={{width: '70%' }}>
+          <span tw="pl-7">Minesweeper</span>
+          <span>Unmarked: {10-numMarked}</span>
         </div>
         <HeaderRow />
         {board.map((r, i, arr) => {
@@ -109,11 +107,12 @@ export const generateImage = (
             );
           }
         })}
-        {/*boardCleared &&
-          <span tw="bg-gray-200 px-10 py-6 text-black shadow-xl text-9xl rounded-lg opacity-95"
-                style={{position: 'absolute', top: '500px', left: '300px' }}>
-                You win!
-      </span>*/}
+        {boardCleared &&
+        <span tw="bg-gray-200 px-10 py-6 text-black shadow-xl text-8xl rounded-lg opacity-95"
+              style={{position: 'absolute', top: '320px', left: '180px' }}>
+              You win!
+        </span>
+        }
       </div>
     </div>
   );
