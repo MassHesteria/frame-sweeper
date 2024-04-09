@@ -16,8 +16,8 @@ const Row = ({
   const getTile = (value: number, col: number) => {
     // Marked the cell as a mine?
     if (cells[idx][col] == -1) {
-      //return '🔴'
-      return 'X'
+      return <span tw="text-4xl">🔴</span>
+      //return 'X'
     }
 
     // Unopened or opened without adjacent mines
@@ -57,15 +57,15 @@ const Row = ({
   }
   const classes = "flex border-2 border-amber-900 w-1/12 h-full ";
   return (
-    <div tw="flex flex-row w-full h-1/12 pl-22">
+    <div tw="flex flex-row w-full h-1/12 pl-22 text-5xl">
       <div tw="flex w-1/12 h-full">
-        <span tw="ml-auto my-auto pr-5 text-amber-900">{idx}</span>
+        <span tw="ml-auto my-auto pr-5 text-amber-900 text-3xl">{idx}</span>
       </div>
       {row.map((c, i, arr) => {
         if (i > 0 && i < arr.length - 1) {
           return (
             <div key={i} tw={classes + getBackgroundColor(i)}>
-              <span tw="m-auto text-6xl">{getTile(c, i)}</span>
+              <span tw="m-auto">{getTile(c, i)}</span>
             </div>
           );
         }
@@ -88,7 +88,7 @@ export const generateImage = (
   return (
     <div tw="flex w-full h-full bg-orange-200">
       <div tw="flex flex-col w-full">
-        <div tw="flex flex-row w-2/3 pt-7 mx-auto pb-7 justify-between text-amber-900 text-5xl">
+        <div tw="flex flex-row w-3/5 pt-7 mx-auto pb-5 justify-between text-amber-900 text-4xl">
           <span>Minesweeper</span>
           {boardCleared
           ? <span>You Win!</span>

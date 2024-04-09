@@ -133,7 +133,9 @@ const handleRequest = frames(async (ctx: any) => {
   return {
     image: generateImage(fid, board, cells, gameOver, boardCleared),
     imageOptions: {
-        aspectRatio: '1:1'
+        aspectRatio: '1:1',
+        height: 800,
+        width: 800
     },
     textInput: (fid && !gameEnded) ? 'Enter Cells: a2 c1 i7 ...' : undefined,
     buttons: gameEnded
