@@ -70,7 +70,7 @@ const handleRequest = frames(async (ctx: any) => {
       },
       buttons: [
         <Button action="post" target={baseRoute + "&newGame=1"}>
-          Start Playing 🙂
+          Start Playing 💣
         </Button>,
         <Button action="link" target={shareLink}>
           Share
