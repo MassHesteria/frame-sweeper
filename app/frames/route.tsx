@@ -13,6 +13,7 @@ import {
 } from "./frames";
 import { getHostName} from "../data";
 import { generateImage } from "./generate";
+import { IntroPage } from "./components/intro";
 
 //export const runtime = 'edge'
 
@@ -55,7 +56,7 @@ const handleRequest = frames(async (ctx: any) => {
   
   if (fid == undefined) {
     return ({
-      image: generateImage(fid, [], [], false, false),
+      image: <IntroPage />,
       imageOptions: {
           aspectRatio: '1.91:1'
       },

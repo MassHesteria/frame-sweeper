@@ -75,15 +75,12 @@ const Row = ({
 };
 
 export const generateImage = (
-  fid: number | undefined,
+  fid: number,
   board: Board,
   cells: Cell[][],
   openedBomb: boolean,
   boardCleared: boolean
 ) => {
-  if (fid == undefined) {
-    return <IntroPage />;
-  }
   const numMarked = cells.flat().filter(c => c == -1).length;
   return (
     <div tw="flex w-full h-full bg-orange-200">
