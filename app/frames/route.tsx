@@ -47,20 +47,11 @@ const encodeState = (board: Board, cells: Cell[][]) => {
 
 const handleRequest = frames(async (ctx: any) => {
   let fid = ctx.message?.requesterFid;
-  const caster = ctx.message?.castId?.fid;
-  const follows = ctx.message?.requesterFollowsCaster;
-
-  //console.log('fid:',fid,'caster:',caster,'follows:',follows)
-
-  if (caster != fid && !follows) {
-    fid = undefined
-  }
-  //console.log('final fid:',fid)
 
   const timestamp = `${Date.now()}`
   const baseRoute = getHostName() + "/frames?ts=" + timestamp
   const shareLink = "https://warpcast.com/~/compose?embeds[]=" +
-    encodeURIComponent(getHostName());
+    encodeURIComponent(baseRoute);
   
   if (fid == undefined) {
     return ({
