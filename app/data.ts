@@ -9,10 +9,3 @@ export const getHostName = (): string => {
   const proto = headersList.get('x-forwarded-proto');
   return `${proto}://${host}`;
 }
-
-export const getHubRoute = (): string => {
-  if (process.env['VERCEL_REGION']) {
-    return 'https://nemes.farcaster.xyz:2281'
-  }
-  return 'http://localhost:3010/hub'
-}

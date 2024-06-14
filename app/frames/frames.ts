@@ -1,6 +1,5 @@
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames } from "frames.js/next";
-import { getHubRoute } from "../data";
 
 export type Board = number[][];
 export type Cell = -1|0|1
@@ -14,11 +13,10 @@ export const frames = createFrames<State>({
   initialState: {
     data: [],
   },
-  middleware: [
-    farcasterHubContext({
-      hubHttpUrl: getHubRoute(),
-    }),
-  ],
+  middleware: [farcasterHubContext(
+    process.env['VERCEL_REGION'] ? {} : {
+    hubHttpUrl: 'http://localhost:3010/hub'
+  })],
 });
 
 function getRandomNumber(min: number, max: number) {
